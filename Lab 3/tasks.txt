@@ -1,0 +1,4 @@
+1. Four-step algorithm iteration https://en.wikipedia.org/wiki/Nagel%E2%80%93Schreckenberg_model. - 3p
+2. CA with periodic boundaries. - 1p
+3. Click on an empty cell, spawns a car. Nothing happens when clicked on an occupied cell. - 1p
+4. Clean code, OOP and functional programming in Java. - 1p
