@@ -30,27 +30,10 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
             for (int y = 0; y < points[x].length; ++y) {
                 // TODO
                 if (points[x][y].isCar && !points[x][y].newCar) {
-                    System.out.println(x);
-                    System.out.println(y);
 
                     points[x][y].updateVelocity();
                     points[x][y].carMotion();
                     int nX = points[x][y].x;
-
-                    System.out.println("predkosc: ");
-                    System.out.println(points[x][y].velocity);
-
-                    System.out.println("Sąsiad: ");
-                    if (points[x][y].closestNeighbor() != null){
-                        System.out.println(points[x][y].closestNeighbor().x);
-                    }
-
-                    System.out.println("po zmianie");
-
-                    System.out.println(nX);
-                    System.out.println(y);
-
-
                     int velocity = points[x][y].velocity;
 
                     if(points[x][y].velocity > 0) {
