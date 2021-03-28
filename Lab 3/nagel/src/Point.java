@@ -33,19 +33,31 @@ public class Point {
         this.isCar = false;
     }
 
+//    public Point closestNeighbor() {
+//        for (int i = 1; i < this.map.getMaxVelocity(); i++) {
+//            if (this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].isCar &&
+//                    !this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].newCar) {
+//                System.out.println(abs(this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].x));
+//                return this.map.getPoints()[(abs(x+i+this.map.getPoints().length)%this.map.getPoints().length)][y];
+//            }
+//        }
+//        return null;
+//    }
+
     public Point closestNeighbor() {
         for (int i = 1; i < this.map.getMaxVelocity(); i++) {
-            if (this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].isCar &&
-                    !this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].newCar) {
-                System.out.println(this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].x);
+            if(this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].isCar) {
+                System.out.println((x+i+this.map.getPoints().length)%this.map.getPoints().length);
                 return this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y];
             }
         }
         return null;
     }
 
+
+
     public void carMotion() {
-        this.x = (this.x + this.velocity)%this.map.getPoints().length;
+        this.x = (this.x + this.velocity+this.map.getPoints().length)%this.map.getPoints().length;
     }
 
     public void updateVelocity() {
@@ -60,7 +72,7 @@ public class Point {
 
     public void slowingDown() {
         if (this.closestNeighbor() != null && this.velocity > 0) {
-            if (this.closestNeighbor().x - this.x  < this.velocity) {
+            if ((this.closestNeighbor().x - this.x + this.map.getPoints().length)%this.map.getPoints().length -1< this.velocity) {
                 this.velocity = this.closestNeighbor().x - this.x - 1;
             }
         }
