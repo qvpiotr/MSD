@@ -35,9 +35,10 @@ public class Point {
 
     public Point closestNeighbor() {
         for (int i = 1; i < this.map.getMaxVelocity(); i++) {
-            if (this.map.getPoints()[(x+i)%this.map.getPoints().length][y].isCar &&
-                    !this.map.getPoints()[(x+i)%this.map.getPoints().length][y].newCar) {
-                return this.map.getPoints()[(x+i)%this.map.getPoints().length][y];
+            if (this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].isCar &&
+                    !this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].newCar) {
+                System.out.println(this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].x);
+                return this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y];
             }
         }
         return null;
