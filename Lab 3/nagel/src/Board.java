@@ -34,12 +34,15 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
                     points[x][y].updateVelocity();
                     points[x][y].carMotion();
                     int nX = points[x][y].x;
+                    int nY = points[x][y].y;
                     int velocity = points[x][y].velocity;
 
                     if(points[x][y].velocity > 0) {
-                        points[nX][y] = new Point(nX,y,this,velocity);
-                        points[nX][y].isCar = true;
+                        points[nX][nY] = new Point(nX,nY,this,velocity);
+                        points[nX][nY].isCar = true;
+                        if (points[x][y].overtaking) points[nX][nY].overtaking = true;
                         points[x][y].isCar = false;
+                        points[x][y].overtaking = false;
                     }
 
                 }
@@ -103,6 +106,10 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
                 // TODO
                 if(points[x][y].isCar) {
                     g.setColor(new Color(0,0,0));
+                    g.fillRect((x * size) + 1, (y * size) + 1, (size - 1), (size - 1));
+                }
+                if(points[x][y].overtaking) {
+                    g.setColor(new Color(255,0,0));
                     g.fillRect((x * size) + 1, (y * size) + 1, (size - 1), (size - 1));
                 }
 

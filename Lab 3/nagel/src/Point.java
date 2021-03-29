@@ -12,6 +12,7 @@ public class Point {
     public int x;
     public int y;
 
+    public boolean overtaking = false;
 
     // TODO
 
@@ -31,38 +32,144 @@ public class Point {
 
     public void clear() {
         this.isCar = false;
+        this.overtaking = false;
     }
 
-//    public Point closestNeighbor() {
-//        for (int i = 1; i < this.map.getMaxVelocity(); i++) {
-//            if (this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].isCar &&
-//                    !this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].newCar) {
-//                System.out.println(abs(this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].x));
-//                return this.map.getPoints()[(abs(x+i+this.map.getPoints().length)%this.map.getPoints().length)][y];
-//            }
-//        }
-//        return null;
-//    }
 
     public Point closestNeighbor() {
         for (int i = 1; i < this.map.getMaxVelocity(); i++) {
             if(this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y].isCar) {
-                System.out.println((x+i+this.map.getPoints().length)%this.map.getPoints().length);
+//                System.out.println((x+i+this.map.getPoints().length)%this.map.getPoints().length);
                 return this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y];
             }
         }
         return null;
     }
 
+    public Point leftClosestNeighborBehind() {
+        for (int i = 1; i < this.map.getMaxVelocity(); i++) {
+            if(this.map.getPoints()[(x-i+this.map.getPoints().length)%this.map.getPoints().length][y-1].isCar) {
+//                System.out.println((x-i+this.map.getPoints().length)%this.map.getPoints().length);
+                return this.map.getPoints()[(x-i+this.map.getPoints().length)%this.map.getPoints().length][y-1];
+            }
+        }
+        return null;
+    }
+
+    public Point leftclosestNeighborInFrontOf() {
+        for (int i = 1; i < this.map.getMaxVelocity(); i++) {
+            if(this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y-1].isCar) {
+//                System.out.println((x+i+this.map.getPoints().length)%this.map.getPoints().length);
+                return this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y-1];
+            }
+        }
+        return null;
+    }
+
+    public Point rightClosestNeighborInFrontOf() {
+        for (int i = 1; i < this.map.getMaxVelocity(); i++) {
+            if(this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y+1].isCar) {
+//                System.out.println((x+i+this.map.getPoints().length)%this.map.getPoints().length);
+                return this.map.getPoints()[(x+i+this.map.getPoints().length)%this.map.getPoints().length][y+1];
+            }
+        }
+        return null;
+    }
+
+    public Point rightClosestNeighborBehind() {
+        for (int i = 1; i < this.map.getMaxVelocity(); i++) {
+            if(this.map.getPoints()[(x-i+this.map.getPoints().length)%this.map.getPoints().length][y+1].isCar) {
+//                System.out.println((x-i+this.map.getPoints().length)%this.map.getPoints().length);
+                return this.map.getPoints()[(x-i+this.map.getPoints().length)%this.map.getPoints().length][y+1];
+            }
+        }
+        return null;
+    }
+
+
+    public boolean canOvertake() {
+
+        if (this.closestNeighbor() != null && this.velocity > 0) {
+            if ((this.closestNeighbor().x - this.x + this.map.getPoints().length)%this.map.getPoints().length -1< this.velocity) {
+                if (this.leftclosestNeighborInFrontOf() == null && this.leftClosestNeighborBehind() == null) {
+                    return true;
+                }
+                else if (this.leftclosestNeighborInFrontOf() != null && this.leftClosestNeighborBehind() != null) {
+                    if ((this.leftClosestNeighborBehind().x - this.x + this.map.getPoints().length)%this.map.getPoints().length -1 >
+                            this.leftClosestNeighborBehind().velocity && (this.leftclosestNeighborInFrontOf().x - this.x + this.map.getPoints().length)%this.map.getPoints().length -1 >
+                            this.velocity) {
+                        return true;
+                    }
+                }
+                else if (this.leftclosestNeighborInFrontOf() != null && this.leftClosestNeighborBehind() == null) {
+                    if ((this.leftclosestNeighborInFrontOf().x - this.x + this.map.getPoints().length)%this.map.getPoints().length -1 >
+                            this.velocity) {
+                        return true;
+                    }
+                }
+
+                else if (this.leftclosestNeighborInFrontOf() == null && this.leftClosestNeighborBehind() != null) {
+                    if ((this.leftClosestNeighborBehind().x - this.x + this.map.getPoints().length)%this.map.getPoints().length -1 >
+                            this.leftClosestNeighborBehind().velocity) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+    public boolean canReturn() {
+        if (this.overtaking) {
+            if (this.rightClosestNeighborInFrontOf() == null && this.rightClosestNeighborBehind() == null) {
+                return true;
+            }
+            else if (this.rightClosestNeighborInFrontOf() != null && this.rightClosestNeighborBehind() != null) {
+                if ((this.rightClosestNeighborBehind().x - this.x + this.map.getPoints().length) % this.map.getPoints().length - 1 >
+                        this.rightClosestNeighborBehind().velocity && (this.rightClosestNeighborInFrontOf().x - this.x + this.map.getPoints().length) % this.map.getPoints().length - 1 >
+                        this.velocity) {
+                    return true;
+                }
+            }
+            else if (this.rightClosestNeighborInFrontOf() != null && this.rightClosestNeighborBehind() == null) {
+                if ((this.rightClosestNeighborInFrontOf().x - this.x + this.map.getPoints().length) % this.map.getPoints().length - 1 >
+                        this.velocity) {
+                    return true;
+                }
+            }
+            else if (this.rightClosestNeighborInFrontOf() == null && this.rightClosestNeighborBehind() != null) {
+                if ((this.rightClosestNeighborBehind().x - this.x + this.map.getPoints().length) % this.map.getPoints().length - 1 >
+                        this.rightClosestNeighborBehind().velocity) {
+                    return true;
+                }
+            }
+        }
+    return false;
+    }
 
 
     public void carMotion() {
         this.x = (this.x + this.velocity+this.map.getPoints().length)%this.map.getPoints().length;
     }
 
+
     public void updateVelocity() {
         this.acceleration();
-        this.slowingDown();
+        if (this.y < this.map.getPoints().length && this.canReturn()) {
+            this.y = y+1;
+            System.out.println("bede wracał");
+            this.overtaking = false;
+        }
+        if (this.y >= 1 && this.canOvertake()) {
+            this.y = y-1;
+            System.out.println("bede wyprzedzał");
+            this.overtaking = true;
+        }
+        else {
+            this.slowingDown();
+        }
         this.randomization();
     }
 
