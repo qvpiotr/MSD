@@ -30,6 +30,7 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 	private boolean running = false;
 	public Report rep;
 
+
 	public GUI(JFrame jf) {
 		frame = jf;
 		timer = new Timer(initDelay, this);

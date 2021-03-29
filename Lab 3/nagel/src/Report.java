@@ -10,11 +10,11 @@ public class Report {
 
     public Report(Board map) throws IOException {
         this.map = map;
-        this.data = new FileWriter("car_flow.txt");
+        this.data = new FileWriter("car_flow_" + this.map.initialNumberOfCars + ".txt");
     }
 
     public void generateReport(int n) throws IOException {
-        data = new FileWriter("car_flow.txt",true);
+        data = new FileWriter("car_flow_" + this.map.initialNumberOfCars + ".txt",true);
         data.write("Liczba iteracji: " + n + ' ' +"Flow: " + this.map.stat.carsFlow() + "\n");
         data.close();
     }
