@@ -4,7 +4,6 @@ import java.awt.Insets;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
 import java.util.Random;
 
 import javax.swing.JComponent;
@@ -16,6 +15,8 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
     private int size = 10;
     public int editType = 0;
     private int maxVelocity = 5;
+    public Stats stat;
+    public int initialNumberOfCars = 500;
 
     public Board(int length, int height) {
         addMouseListener(this);
@@ -23,6 +24,7 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
         addMouseMotionListener(this);
         setBackground(Color.WHITE);
         setOpaque(true);
+        this.stat = new Stats(this);
     }
 
     public void iteration() {
@@ -32,7 +34,7 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
                 // TODO
                 if (points[x][y].isCar && !points[x][y].newCar) {
 
-                    points[x][y].updateVelocity();
+                    points[x][y].updateVelocityExtended();
                     points[x][y].carMotion();
                     int nX = points[x][y].x;
                     int nY = points[x][y].y;
@@ -71,7 +73,7 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
                 points[x][y] = new Point(x,y,this,maxVelocity);
             }
         }
-        randomInitialState(100);
+        randomInitialState(initialNumberOfCars);
     }
 
     public void randomPoints() {

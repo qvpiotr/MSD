@@ -3,6 +3,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,6 +28,7 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 	private final int maxDelay = 500;
 	private final int initDelay = 100;
 	private boolean running = false;
+	public Report rep;
 
 	public GUI(JFrame jf) {
 		frame = jf;
@@ -33,7 +36,15 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 		timer.stop();
 	}
 
-	public void initialize(Container container) {
+	public Board getBoard() {
+		return board;
+	}
+
+	public int getIterNum() {
+		return iterNum;
+	}
+
+	public void initialize(Container container) throws IOException {
 		container.setLayout(new BorderLayout());
 		container.setSize(new Dimension(1024, 768));
 
@@ -58,6 +69,7 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 		buttonPanel.add(pred);
 
 		board = new Board(1024, 768 - buttonPanel.getHeight());
+		rep = new Report(board);
 		container.add(board, BorderLayout.CENTER);
 		container.add(buttonPanel, BorderLayout.SOUTH);
 	}
@@ -67,6 +79,19 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 			iterNum++;
 			frame.setTitle("Sound simulation (" + Integer.toString(iterNum) + " iteration)");
 			board.iteration();
+			try {
+				for (int i = 50; i <= 1000; i += 50) {
+					if (i == iterNum) {
+//						System.out.println("iteracja: " + iterNum);
+						rep.generateReport(i);
+					}
+				}
+			} catch (IOException ioException) {
+				ioException.printStackTrace();
+			}
+
+
+
 		} else {
 			String command = e.getActionCommand();
 			if (command.equals("Start")) {

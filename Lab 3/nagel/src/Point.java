@@ -155,21 +155,25 @@ public class Point {
     }
 
 
-    public void updateVelocity() {
+    public void updateVelocityExtended() {
         this.acceleration();
         if (this.y < this.map.getPoints().length && this.canReturn()) {
             this.y = y+1;
-            System.out.println("bede wracał");
             this.overtaking = false;
         }
         if (this.y >= 1 && this.canOvertake()) {
             this.y = y-1;
-            System.out.println("bede wyprzedzał");
             this.overtaking = true;
         }
         else {
             this.slowingDown();
         }
+        this.randomization();
+    }
+
+    public void updateVelocity() {
+        this.acceleration();
+        this.slowingDown();
         this.randomization();
     }
 
