@@ -5,6 +5,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
+import java.util.Random;
 
 import javax.swing.JComponent;
 import javax.swing.event.MouseInputListener;
@@ -69,6 +70,24 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
             for (int y = 0; y < points[x].length; ++y) {
                 points[x][y] = new Point(x,y,this,maxVelocity);
             }
+        }
+        randomInitialState(100);
+    }
+
+    public void randomPoints() {
+        int x;
+        int y;
+        Random r = new Random();
+        do{
+            x = r.nextInt(this.points.length);
+            y = r.nextInt(this.points[x].length);
+        }while (points[x][y].isCar);
+        points[x][y].isCar = true;
+    }
+
+    public void randomInitialState(int n) {
+        for (int i = 0; i < n; i++) {
+            randomPoints();
         }
     }
 
